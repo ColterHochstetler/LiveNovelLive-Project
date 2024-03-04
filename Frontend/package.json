@@ -5,6 +5,8 @@
   "main": "src/main.js",
   "license": "MIT",
   "dependencies": {
+    "@langchain/openai": "^0.0.15",
+    "langchain": "^0.1.25",
     "svelte": "^4.2.12"
   },
   "devDependencies": {
