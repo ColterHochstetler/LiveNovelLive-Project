@@ -4,11 +4,15 @@ import css from 'rollup-plugin-css-only';
 import livereload from 'rollup-plugin-livereload';
 import serve from 'rollup-plugin-serve';
 import { terser } from 'rollup-plugin-terser';
+import preprocess from 'svelte-preprocess';
+import alias from '@rollup/plugin-alias';
+import path from 'path';
 
 const production = !process.env.ROLLUP_WATCH;
+const projectRootDir = path.resolve();
 
 export default {
-  input: 'src/main.js',
+  input: 'src/main.ts',
   output: {
     sourcemap: true,
     format: 'iife',
@@ -17,14 +21,12 @@ export default {
   },
   plugins: [
     svelte({
+      preprocess: preprocess(),
       compilerOptions: {
-        // enable run-time checks when not in production
         dev: !production,
       },
-      // Correctly placed outside `compilerOptions`
-      emitCss: true, // ensure you're emitting CSS as an asset for rollup-plugin-css-only to process
+      emitCss: true,
     }),
-    // Handle CSS extraction separately
     css({ output: 'bundle.css' }),
 
     resolve({
@@ -36,6 +38,11 @@ export default {
       contentBase: 'public',
       historyApiFallback: true,
       port: 5000,
+    }),
+    alias({
+      entries: [
+        { find: /^src\/(.*)$/, replacement: path.resolve(projectRootDir, 'src/$1') }
+      ]
     }),
 
     !production && livereload('public'),

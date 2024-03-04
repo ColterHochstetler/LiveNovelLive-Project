@@ -1,5 +1,5 @@
-<script>
-    let name = 'world';
+<script lang="ts">
+    export let name: string;
   </script>
   
   <style>
